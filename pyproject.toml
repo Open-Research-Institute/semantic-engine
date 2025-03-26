@@ -1,0 +1,11 @@
+[project]
+name = "semantic-engine"
+version = "0.1.0"
+description = "The ORI semantic engine"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "libsql-experimental>=0.0.41",
+    "nomic>=3.4.1",
+    "sqlalchemy-libsql>=0.1.0",
+]
