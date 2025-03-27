@@ -104,10 +104,11 @@ class Doc(Base):
     
     id = Column(Text, primary_key=True, nullable=False)
     source = Column(Text, nullable=False)  # enum in TS but Text in SQLite
+    url = Column(Text, nullable=True)
     content = Column(Text, nullable=False)
     createdAt = Column(Integer, nullable=False)
     creatorId = Column(Text, nullable=False)
-    embedding = Column(Vector32())
+    embedding = Column(Vector32(dimensions=768))
     
     def __repr__(self):
         return f"<Doc(id={self.id}, source={self.source})>"

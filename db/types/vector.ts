@@ -4,11 +4,11 @@ import { customType } from "drizzle-orm/sqlite-core";
 export const vector32 = customType<{
     data: number[];
     config: { dimensions: number };
-    configRequired: false;
+    configRequired: true;
     driverData: Buffer;
 }>({
     dataType(config) {
-        return `F32_BLOB(${config?.dimensions})`;
+        return `F32_BLOB(${config.dimensions})`;
     },
     fromDriver(value: Buffer) {
         return Array.from(new Float32Array(value.buffer));

@@ -13,9 +13,10 @@ export const docsTable = sqliteTable(
     {
         id: text().primaryKey().notNull(),
         source: text({ enum: ["community-archive"] }).notNull(),
+        url: text(),
         content: text().notNull(),
         createdAt: integer().notNull(),
         creatorId: text().notNull(),
-        embedding: vector32(),
+        embedding: vector32({ dimensions: 768 }),
     }
 );
