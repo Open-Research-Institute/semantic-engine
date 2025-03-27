@@ -81,3 +81,7 @@ pnpm do scripts/push-to-nomic-atlas.py semantic-engine
 ```
 
 Check the scripts for more info. Better docs soon
+
+## Database GUI
+
+You can quickly browse and query your local database without installing anything by using [Outerbase Studio](https://studio.outerbase.com/playground/client?s=087fedce-0e74-4f6e-8fb1-1d4f94f6d2d1) or [SQLime](https://sqlime.org/). Just open in your browser and use to open semantic-engine.sqlite (or whatever you named DB_URL in your .env)
