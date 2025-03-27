@@ -1,4 +1,6 @@
-import './scripts/_load-env';
+import { loadEnvConfig } from '@next/env';
+const projectDir = process.cwd()
+loadEnvConfig(projectDir)
 
 import { defineConfig } from 'drizzle-kit';
 export default defineConfig({
