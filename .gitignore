@@ -53,5 +53,7 @@ __pycache__/
 *.pyd
 *.pyw
 *.pyz
-
 uv.lock
+
+# archives
+archives/

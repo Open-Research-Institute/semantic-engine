@@ -20,13 +20,14 @@ dataset_name = (sys.argv[1])
 
 
 # Connect to the database using SQLAlchemy
-db_url = os.getenv("DB_URL")
-if not db_url:
-    print("Error: DB_URL environment variable not set")
+
+dataset_id = os.getenv("DATASET_ID")
+if not dataset_id:
+    print("Error: DATASET_ID environment variable not set")
     sys.exit(1)
 
-if db_url.startswith("file:"):
-    db_url = f"sqlite:///{db_url[5:]}"
+
+    db_url = f"sqlite:///${dataset_id}.sqlite"
 try:
     session = get_session(db_url)    
     # Query all documents with embeddings
@@ -47,9 +48,10 @@ try:
             
             # Add metadata
             data.append({
-                "id": doc.id,
+                "id": doc.id.split(':')[1],
                 "source": doc.source,
                 "content": doc.content,
+                "url": doc.url,
                 "createdAt": doc.createdAt,
                 "creatorId": doc.creatorId
             })

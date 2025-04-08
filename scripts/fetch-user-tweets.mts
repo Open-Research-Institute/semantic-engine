@@ -1,5 +1,3 @@
-#!/usr/bin/env tsx
-
 import { db } from '@/db/db.js';
 import { docsTable } from '@/db/schema.js';
 import { communityArchiveClient } from "@/lib/community-archive/client";
@@ -13,8 +11,8 @@ async function getExistingTweetRange(accountId: string) {
         .select({ id: docsTable.id })
         .from(docsTable)
         .where(and(
-            eq(docsTable.source, 'community-archive'),
-            eq(docsTable.creatorId, accountId)
+            eq(docsTable.origin, 'community-archive'),
+            eq(docsTable.author, accountId)
         ))
         .orderBy(asc(docsTable.id))
         .limit(1)
@@ -29,8 +27,8 @@ async function getExistingTweetRange(accountId: string) {
         .select({ id: docsTable.id })
         .from(docsTable)
         .where(and(
-            eq(docsTable.source, 'community-archive'),
-            eq(docsTable.creatorId, accountId)
+            eq(docsTable.origin, 'community-archive'),
+            eq(docsTable.author, accountId)
         ))
         .orderBy(desc(docsTable.id))
         .limit(1)
@@ -108,6 +106,7 @@ async function main() {
                 content: tweet.full_text,
                 embedding: null, // No embedding yet
                 source: "community-archive" as const,
+                url: `https://x.com/${username}/status/${tweet.tweet_id}`,
                 createdAt: new Date(tweet.created_at).getTime() / 1000,
                 creatorId: tweet.account_id,
             }));
@@ -116,7 +115,7 @@ async function main() {
             const insertBatchSize = 100;
             for (let i = 0; i < inserts.length; i += insertBatchSize) {
                 const batch = inserts.slice(i, i + insertBatchSize);
-                await db.insert(docsTable).values(batch);
+                await db.insert(docsTable).values(batch).onConflictDoNothing();
                 console.log(`Inserted ${batch.length} tweets (${i + batch.length}/${inserts.length})`);
             }
 

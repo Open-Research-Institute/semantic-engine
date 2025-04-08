@@ -3,42 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "do": "eval $(./scripts/_load-env.ts) && $1",
     "init-db": "drizzle-kit push",
     "login:nomic": "uv run nomic login"
   },
   "dependencies": {
     "@ai-sdk/google": "^1.2.3",
+    "@ai-sdk/openai-compatible": "^0.2.5",
     "@libsql/client": "^0.15.0",
     "@libsql/sqlite3": "^0.3.1",
-    "@next/env": "^15.2.4",
+    "@supabase/supabase-js": "^2.49.3",
     "ai": "^4.2.1",
-    "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
     "drizzle-orm": "^0.41.0",
-    "lucide-react": "^0.483.0",
-    "next": "15.2.3",
-    "openapi-fetch": "^0.13.5",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "tailwind-merge": "^3.0.2",
-    "tw-animate-css": "^1.2.4"
+    "hash-wasm": "^4.12.0",
+    "nanoid": "^5.1.5",
+    "openapi-fetch": "^0.13.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
     "drizzle-kit": "^0.30.5",
     "eslint": "^9",
-    "eslint-config-next": "15.2.3",
-    "tailwindcss": "^4",
-    "tsx": "^4.19.3",
     "typescript": "^5"
   }
 }

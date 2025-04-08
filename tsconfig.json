@@ -31,5 +31,5 @@
     "scripts/fetch-user-tweets.mts",
     "scripts/query-community-archive.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["packages/semantic-engine/node_modules"]
 }
