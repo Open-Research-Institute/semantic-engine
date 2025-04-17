@@ -11,9 +11,11 @@ Install guide: https://docs.astral.sh/uv/getting-started/installation/
 
 And `bun` to run the js ones
 
-copy `.env.template` to `.env` and fill in with the API keys you intend to use
+And [LMStudio](https://lmstudio.ai/) for local embeddings
 
-### Quickstart
+copy `.env.template` to `.env`
+
+### Quickstart (RAG on tweets from community archive)
 
 Install js dependencies
 
@@ -29,18 +31,41 @@ bun init-db
 
 this will create a semantic-engine.sqlite (or whatever you named DATASET_ID in your .env) file
 
-Fetch Defender's tweets from the community archive
+Download an twitter archive from community archive
 
 ```
-bun scripts/fetch-user-tweets.mts DefenderOfBasic
+# you can provide multiple usernames, or omit them to download all archives
+bun scripts/download-archives.mts DefenderOfBasic
 ```
 
-Embed them with Google text-embedding-004
-(Requires GOOGLE_GENERATIVE_AI_API_KEY on .env; grab one from https://aistudio.google.com/app/apikey)
+Load up the tweets from an user archive on the local db:
+
+```
+# you can provide multiple archives, or use a glob like archives/* to load them all
+bun scripts/load-archives.mts archives/defenderofbasic.json
+```
+
+Embed them using LMStudio:
+
+Start LMStudio
+Download this model: https://model.lmstudio.ai/download/limcheekin/snowflake-arctic-embed-l-v2.0-GGUF
+Go to Developer tab on the left pane (if it's not showing up, make sure you're in `Power User` or `Developer` mode rather than `User` on the bottom left status bar)
+Start the server by toggling the top left switch that says `Status: Stopped`
+Either click on `Select a model to load` on the topbar and load `Snowflake Arctic Embed L v2.0` or Click on Settings and make sure `Just-in-Time Model Loading` is enabled
+
+Embed them (can take a while)
 
 ```
 bun scripts/embed-documents.mts
 ```
+
+Query your dataset:
+
+```
+bun scripts/query-documents.mts "query: what is the meaning of memetics?"
+```
+
+### Pushing data to Nomic Atlas
 
 Sign in to nomic account:
 Create account/sign in, then go to https://atlas.nomic.ai/cli-login to generate an API key, then run
@@ -57,7 +82,12 @@ bun scripts/push-to-nomic-atlas.py <name-for-the-dataset>
 
 Then open your nomic dashboard to see the map
 
-### Scripts
+## Datasets
+
+Data is stored in a local sqlite db
+You can use different files by specifying a different `DATASET_ID` on `.env`
+
+## Scripts
 
 you can check the available scripts in the `scripts` folder
 some are written in typescript, and some in python
@@ -68,12 +98,10 @@ you can run any of them using:
 bun <script> <params>
 ```
 
-works for both ts and python scripts
-
 e.g.:
 
 ```
-bun scripts/fetch-user-tweets.mts DefenderOfBasic
+bun scripts/download-archives.mts DefenderOfBasic
 ```
 
 ```

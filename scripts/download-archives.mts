@@ -5,6 +5,12 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 
 import fs from 'fs'
 
+// Parse command line arguments (usernames)
+const usernames = process.argv.slice(2).map(username => username.toLowerCase());
+console.log(usernames.length > 0
+    ? `Downloading archives for users: ${usernames.join(', ')}`
+    : `No usernames provided. Downloading all archives.`);
+
 // Set parallelism limit with default of 10
 const maxConcurrent = parseInt(process.env.MAX_CONCURRENT_DOWNLOADS || '10', 10);
 console.log(`Downloading with parallelism of ${maxConcurrent}`);
@@ -14,6 +20,17 @@ const { data } = await supabase
     .from('objects')
     .select('id, name')
     .eq('bucket_id', 'archives')
+
+// Filter items based on usernames if provided
+let itemsToDownload = data!;
+if (usernames.length > 0) {
+    itemsToDownload = data!.filter(item => {
+        const filename = item.name.replace("/archive.json", "");
+        return usernames.includes(filename.toLowerCase());
+    });
+    console.log(`Found ${itemsToDownload.length} matching archives to download:`);
+    console.log(itemsToDownload.map(item => item.name).join('\n'));
+}
 
 const dir = `./archives`;
 if (!fs.existsSync(dir)) {
@@ -27,20 +44,24 @@ async function downloadItem(item: { name: string }) {
     const filePath = `${dir}/${filename}`;
 
     if (fs.existsSync(filePath)) {
-        console.log('skipping', filename)
+        console.log(filename, 'already exists. Skipping...')
         return;
     }
 
     console.log('downloading', filename)
 
-    const result = await supabase
-        .storage
-        .from('archives')
-        .download(name)
+    try {
+        const result = await supabase
+            .storage
+            .from('archives')
+            .download(name)
 
-    const jsonString = await result!.data!.text();
+        const jsonString = await result!.data!.text();
 
-    fs.writeFileSync(filePath, jsonString);
+        fs.writeFileSync(filePath, jsonString);
+    } catch (e) {
+        console.error('error downloading', filename, '. Skipping...')
+    }
 }
 
 // Execute downloads with controlled parallelism
@@ -65,5 +86,5 @@ async function downloadAll(items: { name: string }[], concurrency: number) {
     }
 }
 
-await downloadAll(data!, maxConcurrent);
+await downloadAll(itemsToDownload, maxConcurrent);
 console.log('All downloads completed');

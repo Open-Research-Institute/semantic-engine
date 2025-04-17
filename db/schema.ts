@@ -6,25 +6,11 @@ import {
     text,
 } from "drizzle-orm/sqlite-core";
 
-export const datasetsTable = sqliteTable(
-    "datasets",
-    {
-        id: text().primaryKey().notNull(),
-        createdAt: integer().default(sql`(unixepoch())`),
-        updatedAt: integer().default(sql`(unixepoch())`),
-    }
-);
-
-export const datasetsRelations = relations(datasetsTable, ({ many }) => ({
-    docs: many(docsTable),
-}));
-
 // Root documents table (no embeddings)
 export const docsTable = sqliteTable(
     "docs",
     {
         id: text().primaryKey().notNull(),
-        datasetId: text().notNull(),
         externalId: text().notNull(),
         createdAt: integer().notNull(),
         origin: text({ enum: ["community-archive"] }).notNull(),
@@ -35,14 +21,6 @@ export const docsTable = sqliteTable(
         checksum: text().notNull(),
     }
 );
-
-export const docsRelations = relations(docsTable, ({ many, one }) => ({
-    chunks: many(chunksTable),
-    dataset: one(datasetsTable, {
-        fields: [docsTable.datasetId],
-        references: [datasetsTable.id],
-    }),
-}));
 
 export const chunksTable = sqliteTable(
     "chunks",
@@ -66,9 +44,6 @@ export const chunksRelations = relations(chunksTable, ({ one }) => ({
 
 export type Doc = typeof docsTable.$inferSelect;
 export type DocInsert = typeof docsTable.$inferInsert;
-
-export type Dataset = typeof datasetsTable.$inferSelect;
-export type DatasetInsert = typeof datasetsTable.$inferInsert;
 
 export type Chunk = typeof chunksTable.$inferSelect;
 export type ChunkInsert = typeof chunksTable.$inferInsert;
