@@ -19,13 +19,13 @@ copy `.env.template` to `.env`
 
 Install js dependencies
 
-```
+```bash
 bun i
 ```
 
 Initialize the DB
 
-```
+```bash
 bun init-db
 ```
 
@@ -33,14 +33,14 @@ this will create a semantic-engine.sqlite (or whatever you named DATASET_ID in y
 
 Download an twitter archive from community archive
 
-```
+```bash
 # you can provide multiple usernames, or omit them to download all archives
 bun scripts/download-archives.mts DefenderOfBasic
 ```
 
 Load up the tweets from an user archive on the local db:
 
-```
+```bash
 # you can provide multiple archives, or use a glob like archives/* to load them all
 bun scripts/load-archives.mts archives/defenderofbasic.json
 ```
@@ -55,13 +55,13 @@ Either click on `Select a model to load` on the topbar and load `Snowflake Arcti
 
 Embed them (can take a while)
 
-```
+```bash
 bun scripts/embed-documents.mts
 ```
 
 Query your dataset:
 
-```
+```bash
 bun scripts/query-documents.mts "query: what is the meaning of memetics?"
 ```
 
@@ -70,13 +70,13 @@ bun scripts/query-documents.mts "query: what is the meaning of memetics?"
 Sign in to nomic account:
 Create account/sign in, then go to https://atlas.nomic.ai/cli-login to generate an API key, then run
 
-```
+```bash
 bun login:nomic <api-key>
 ```
 
 Push dataset (all embedded documents) to nomic atlas
 
-```
+```bash
 bun scripts/push-to-nomic-atlas.py <name-for-the-dataset>
 ```
 
@@ -94,17 +94,17 @@ some are written in typescript, and some in python
 
 you can run any of them using:
 
-```
+```bash
 bun <script> <params>
 ```
 
 e.g.:
 
-```
+```bash
 bun scripts/download-archives.mts DefenderOfBasic
 ```
 
-```
+```bash
 bun scripts/push-to-nomic-atlas.py semantic-engine
 ```
 
@@ -112,7 +112,7 @@ Check the scripts for more info. Better docs soon
 
 ## Database GUI
 
-```
+```bash
 bun drizzle-kit studio
 ```
 
