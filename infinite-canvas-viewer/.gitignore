@@ -1,0 +1,3 @@
+public/*.geojson
+node_modules/
+dist/
