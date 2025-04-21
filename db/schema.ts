@@ -6,6 +6,13 @@ import {
     text,
 } from "drizzle-orm/sqlite-core";
 
+export interface TweetMetadata {
+    likes: number;
+    retweets: number;
+}
+
+export type Metadata = TweetMetadata | unknown;
+
 // Root documents table (no embeddings)
 export const docsTable = sqliteTable(
     "docs",
@@ -17,6 +24,7 @@ export const docsTable = sqliteTable(
         url: text(),
         content: text().notNull(),
         ingestedAt: integer().default(sql`(unixepoch())`),
+        metadata: text({ mode: "json" }).$type<Metadata>(),
         author: text().notNull(),
         checksum: text().notNull(),
     }
@@ -43,6 +51,12 @@ export const chunksRelations = relations(chunksTable, ({ one }) => ({
 }));
 
 export type Doc = typeof docsTable.$inferSelect;
+
+export interface Tweet extends Doc {
+    origin: "community-archive";
+    metadata: TweetMetadata;
+}
+
 export type DocInsert = typeof docsTable.$inferInsert;
 
 export type Chunk = typeof chunksTable.$inferSelect;

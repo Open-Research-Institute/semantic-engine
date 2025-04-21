@@ -1,5 +1,5 @@
 import { db } from '@/db/db';
-import { ChunkInsert, chunksTable, DocInsert, docsTable } from '@/db/schema';
+import { ChunkInsert, chunksTable, DocInsert, docsTable, TweetMetadata } from '@/db/schema';
 import { Archive } from '@/lib/community-archive/types';
 import { splitText } from '@/lib/utils/split-text';
 import fs from 'fs';
@@ -83,6 +83,10 @@ for (const archivePath of archivePaths) {
                 createdAt: Math.floor(new Date(thread.created_at).getTime() / 1000),
                 source: 'community-archive',
                 url: `https://x.com/${username}/status/${thread.threadRootId}`,
+                metadata: {
+                    likes: Number(thread.favorite_count),
+                    retweets: Number(thread.retweet_count),
+                } as TweetMetadata
             }
         }));
 
