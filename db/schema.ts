@@ -6,6 +6,9 @@ import {
     text,
 } from "drizzle-orm/sqlite-core";
 
+const origins = ["community-archive", "rss"] as const;
+export type origins = typeof origins[number];
+
 export interface TweetMetadata {
     likes: number;
     retweets: number;
@@ -20,7 +23,7 @@ export const docsTable = sqliteTable(
         id: text().primaryKey().notNull(),
         externalId: text().notNull(),
         createdAt: integer().notNull(),
-        origin: text({ enum: ["community-archive"] }).notNull(),
+        origin: text({ enum: origins }).notNull(),
         url: text(),
         content: text().notNull(),
         ingestedAt: integer().default(sql`(unixepoch())`),
