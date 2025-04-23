@@ -1,0 +1,32 @@
+{
+  "name": "semantic-engine-cli",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "init-db": "drizzle-kit push",
+    "login:nomic": "uv run nomic login"
+  },
+  "dependencies": {
+    "@ai-sdk/google": "^1.2.3",
+    "@ai-sdk/openai-compatible": "^0.2.5",
+    "@libsql/client": "^0.15.0",
+    "@libsql/sqlite3": "^0.3.1",
+    "@supabase/supabase-js": "^2.49.3",
+    "@types/turndown": "^5.0.5",
+    "ai": "^4.2.1",
+    "drizzle-orm": "^0.41.0",
+    "hash-wasm": "^4.12.0",
+    "nanoid": "^5.1.5",
+    "openapi-fetch": "^0.13.5",
+    "rss-parser": "^3.13.0",
+    "turndown": "^7.2.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/node": "^20",
+    "drizzle-kit": "^0.31.0",
+    "eslint": "^9",
+    "typescript": "^5",
+    "@types/bun": "latest"
+  }
+}
